@@ -22,7 +22,7 @@ export default function Header({ email, loggedIn, isSign }) {
   return (
     <header className="header">
       <img src={logo} alt="Логотип Место Россия." className="header__logo" />
-      <div className="header__entry">
+      <nav className="header__entry">
         <article>{loggedIn ? email : ""}</article>
         <Link
           to={loggedIn === false ? buttonInfo.path : "/"}
@@ -32,8 +32,8 @@ export default function Header({ email, loggedIn, isSign }) {
         >
           {loggedIn === false ? buttonInfo.textOfButton : "Выйти"}
         </Link>
-        {/* <button className="header__logged" onClick={isSign}> {loggedIn? 'Выйти':'Войти'}</button> */}
-      </div>
+        {/* <button className="header__entry" onClick={isSign}> {loggedIn? 'Выйти':'Войти'}</button> */}
+      </nav>
     </header>
   );
 }
