@@ -9,9 +9,12 @@ import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 
-import { Route, Routes } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import ProtectedRoute from "./ProtectedRoute"; // импортируем HOC
 import Register from "./Register";
 import Login from "./Login";
+import * as auth from "../utils/auth";
+import InfoTooltip from "./InfoTooltip";
 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
@@ -23,6 +26,14 @@ function App() {
 
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = useState([]);
+  const [email, setEmail] = useState("email");
+  const [loggedIn, setLoggedIn] = useState(false);
+  const navigate = useNavigate();
+  const [infoTooltip, setIsInfoTooltip] = useState({
+    isSuccessRegister: false,
+    isOpen: false,
+  });
+
   useEffect(() => {
     Promise.all([api.getUserInfoApi(), api.getInitialCards()])
       .then(([user, card]) => {
@@ -33,6 +44,66 @@ function App() {
       })
       .catch((err) => console.log(" еггог получения промиса", err));
   }, []); // <----<< [] -- при монтировании один раз!
+
+  useEffect(() => {
+    if (localStorage.getItem("jwt")) {
+      const jwt = localStorage.getItem("jwt");
+      auth
+        .checkToken(jwt)
+        .then(({ email }) => {
+          if (email) {
+            setEmail(email);
+          }
+        })
+        .then(() => {
+          setLoggedIn(true);
+          navigate("/");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, []);
+
+  useEffect(() => {
+    setEmail(localStorage.getItem("email"));
+  }, []);
+
+  function onLogin(email, data) {
+    localStorage.setItem("jwt", data.token);
+    localStorage.setItem("email", email);
+    setLoggedIn(true);
+  }
+  function handleRegister(password, email) {
+    auth
+      .register(password, email)
+      .then(() => {
+        navigate("/sign-in");
+      })
+      .then(() => {
+        infoTooltipSetter(true, true);
+      })
+      .catch((err) => {
+        infoTooltipSetter(true, false);
+        console.log(err);
+      });
+  }
+  function handleAuthorize(password, email) {
+    auth
+      .authorize(password, email)
+      .then((data) => {
+        if (data.token) {
+          onLogin(email, data);
+        }
+      })
+      .then(() => {
+        navigate("/");
+      })
+      .catch((err) => {
+        infoTooltipSetter(true, false);
+        console.log(err);
+      });
+  }
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -55,6 +126,7 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setSelectedCard(null);
+    setIsInfoTooltip({ ...infoTooltip, isOpen: false });
   }
 
   function handleCardLike(card) {
@@ -109,18 +181,33 @@ function App() {
       })
       .catch((err) => console.log("добавлениe карточки :", err));
   }
-
+  function isSign() {
+    localStorage.clear("jwt");
+    setLoggedIn(false);
+    console.log("click isSign");
+  }
+  function infoTooltipSetter(isOpen, isSuccessRegister) {
+    setIsInfoTooltip({ isSuccessRegister, isOpen });
+  }
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="body-root">
-        <Header />
+        <Header email={email} loggedIn={loggedIn} isSign={isSign} />
         <Routes>
-          <Route path="./sign-up" element={<Register />} />
-          <Route path="./sign-in" element={<Login />} />
           <Route
-            path="./"
+            path="/sign-up"
+            element={<Register handleRegister={handleRegister} />}
+          />
+          <Route
+            path="/sign-in"
+            element={<Login handleAuthorize={handleAuthorize} />}
+          />
+          <Route
+            path="/"
             element={
-              <Main
+              <ProtectedRoute
+                element={Main}
+                loggedIn={loggedIn}
                 onEditAvatar={handleEditAvatarClick}
                 onEditProfile={handleEditProfileClick}
                 onAddPlace={handleAddPlaceClick}
@@ -132,6 +219,7 @@ function App() {
               />
             }
           />
+          <Route path="*" element={<Login />} />
         </Routes>
         <Footer />
 
@@ -171,6 +259,12 @@ function App() {
       </PopupWithForm> */}
 
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+
+        <InfoTooltip
+          onClose={closeAllPopups}
+          isOpen={infoTooltip.isOpen}
+          isSuccessRegister={infoTooltip.isSuccessRegister}
+        />
       </div>
     </CurrentUserContext.Provider>
   );

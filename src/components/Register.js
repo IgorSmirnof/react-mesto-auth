@@ -1,24 +1,25 @@
 import React from "react";
-import Link from 'react-router-dom';
+import AuthForm from './AuthForm';
+import { Link } from 'react-router-dom';
 
-function Register() { 
+function Register({ handleRegister }) { 
   function handleSubmit(e, password, email) {
     e.preventDefault();
-    //handleRegister(password, email)
+    handleRegister(password, email)
   }
 
   return (
-    // <AuthForm
-    //   title='Регистрация'
-    //   pathOfButton='/sign-up'
-    //   //handleSubmit={handleSubmit}
-    //   textOfButton='Зарегистрироваться'
-    // >
+    <AuthForm
+      title='Регистрация'
+      pathOfButton='/sign-up'
+      handleSubmit={handleSubmit}
+      textOfButton='Зарегистрироваться'
+    >
       
-    //   <p className='intro-form__paragraph'>Уже зарегистрированы? <Link className='intro-form__link' to="/sign-in">Войти</Link>
-    //   </p>
-    // </AuthForm>
-    <h2>register link</h2>
+      <p className='entry-form__paragraph'>Уже зарегистрированы? <Link className='entry-form__link' to="/sign-in">Войти</Link>
+      </p>
+    </AuthForm>
+    // <h2 color="white">register link "/sign-up"</h2>
   )
 };
 

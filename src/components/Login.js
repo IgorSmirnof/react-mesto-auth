@@ -1,10 +1,21 @@
-import React from "react";
+import React from 'react';
+import AuthForm from './AuthForm';
 
-function Login() { 
+function Login({ handleAuthorize }) {
 
+  function handleSubmit(e, password, email) {
+    e.preventDefault();
+
+    handleAuthorize(password, email)
+  }
+  
   return (
-    <h2>hello login</h2>
-  )
-};
+    <AuthForm
+      title='Вход'
+      textOfButton='Войти'
+      handleSubmit={handleSubmit}
+    />
+  );
+}
 
-export default Login;
+export default Login; 
