@@ -39,7 +39,6 @@ function App() {
       .then(([user, card]) => {
         setCurrentUser(user);
         setCards(card);
-
         // console.log(user);
       })
       .catch((err) => console.log(" еггог получения промиса", err));
@@ -181,14 +180,17 @@ function App() {
       })
       .catch((err) => console.log("добавлениe карточки :", err));
   }
+  
   function isSign() {
     localStorage.clear("jwt");
     setLoggedIn(false);
     console.log("click isSign");
   }
+
   function infoTooltipSetter(isOpen, isSuccessRegister) {
     setIsInfoTooltip({ isSuccessRegister, isOpen });
   }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="body-root">

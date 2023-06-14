@@ -17,7 +17,6 @@ console.log('run InfoTooltip')
           type="button"
           onClick={onClose}
           className="popup__close"
-          // className="popup__close-icon"
         />
         <img
           className="popup__image"
