@@ -8,4 +8,4 @@
 ## Реализуйте аутентификацию пользователя
 ## Реализуйте работу с локальным хранилищем и токеном
 
-## GH-pages: [Ссылка на GH-pages](https://igorsmirnof.github.io/mesto-react-auth/)
+## GH-pages: [Ссылка на GH-pages](https://igorsmirnof.github.io/react-mesto-auth/)
