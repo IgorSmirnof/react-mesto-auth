@@ -29,10 +29,13 @@ function App() {
   const [email, setEmail] = useState("email");
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
-  const [infoTooltip, setIsInfoTooltip] = useState({
+  const [infoTooltip, setInfoTooltip] = useState({
     isSuccessRegister: false,
     isOpen: false,
   });
+  // const [infoTooltip, setInfoTooltip] = useState(false);
+
+  
 
   useEffect(() => {
     Promise.all([api.getUserInfoApi(), api.getInitialCards()])
@@ -43,6 +46,7 @@ function App() {
       })
       .catch((err) => console.log(" еггог получения промиса", err));
   }, []); // <----<< [] -- при монтировании один раз!
+
 
   useEffect(() => {
     if (localStorage.getItem("jwt")) {
@@ -59,50 +63,52 @@ function App() {
           navigate("/");
         })
         .catch((err) => {
+          setLoggedIn(false);
           console.log(err);
         });
     }
+    //eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     setEmail(localStorage.getItem("email"));
   }, []);
 
-  function onLogin(email, data) {
-    localStorage.setItem("jwt", data.token);
-    localStorage.setItem("email", email);
-    setLoggedIn(true);
-  }
-  function handleRegister(password, email) {
-    auth
-      .register(password, email)
-      .then(() => {
-        navigate("/sign-in");
-      })
-      .then(() => {
-        infoTooltipSetter(true, true);
-      })
-      .catch((err) => {
-        infoTooltipSetter(true, false);
-        console.log(err);
-      });
-  }
-  function handleAuthorize(password, email) {
-    auth
-      .authorize(password, email)
-      .then((data) => {
-        if (data.token) {
-          onLogin(email, data);
-        }
-      })
-      .then(() => {
-        navigate("/");
-      })
-      .catch((err) => {
-        infoTooltipSetter(true, false);
-        console.log(err);
-      });
-  }
+  // function onLogin(email, data) {
+  //   localStorage.setItem("jwt", data.token);
+  //   localStorage.setItem("email", email);
+  //   setLoggedIn(true);
+  // }
+  // function handleRegister(password, email) {
+  //   auth
+  //     .register(password, email)
+  //     .then(() => {
+  //       navigate("/sign-in");
+  //     })
+  //     .then(() => {
+  //       infoTooltipSetter(true, true);
+  //     })
+  //     .catch((err) => {
+  //       infoTooltipSetter(true, false);
+  //       console.log(err);
+  //     });
+  // }
+  // function handleAuthorize(password, email) {
+  //   auth
+  //     .authorize(password, email)
+  //     .then((data) => {
+  //       if (data.token) {
+  //         onLogin(email, data);
+  //       }
+  //     })
+  //     .then(() => {
+  //       navigate("/");
+  //     })
+  //     .catch((err) => {
+  //       infoTooltipSetter(true, false);
+  //       console.log(err);
+  //     });
+  // }
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -125,7 +131,8 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setSelectedCard(null);
-    setIsInfoTooltip({ ...infoTooltip, isOpen: false });
+    setInfoTooltip({ ...infoTooltip, isOpen: false });
+    // setInfoTooltip(false );
   }
 
   function handleCardLike(card) {
@@ -188,7 +195,7 @@ function App() {
   }
 
   function infoTooltipSetter(isOpen, isSuccessRegister) {
-    setIsInfoTooltip({ isSuccessRegister, isOpen });
+    setInfoTooltip({ isSuccessRegister, isOpen });
   }
 
   return (
@@ -198,11 +205,13 @@ function App() {
         <Routes>
           <Route
             path="/sign-up"
-            element={<Register handleRegister={handleRegister} />}
+            element={<Register infoTooltipSetter={infoTooltipSetter} />}
+            // handleRegister={handleRegister}
           />
           <Route
             path="/sign-in"
-            element={<Login handleAuthorize={handleAuthorize} />}
+            element={<Login setLoggedIn={setLoggedIn} infoTooltipSetter={infoTooltipSetter} />}
+            // handleAuthorize={handleAuthorize}
           />
           <Route
             path="/"
@@ -221,9 +230,9 @@ function App() {
               />
             }
           />
-          <Route path="*" element={<Login />} />
+          <Route path="*" element={<Login infoTooltipSetter={infoTooltipSetter} />} />
         </Routes>
-        <Footer />
+        {loggedIn && <Footer />}
 
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}

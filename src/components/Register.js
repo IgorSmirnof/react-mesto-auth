@@ -1,11 +1,25 @@
 import React from "react";
 import AuthForm from "./AuthForm";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import * as auth from "../utils/auth";
 
-function Register({ handleRegister }) {
+function Register({ infoTooltipSetter }) {
+  const navigate = useNavigate();
+
   function handleSubmit(e, password, email) {
     e.preventDefault();
-    handleRegister(password, email);
+    auth
+      .register(password, email)
+      .then(() => {
+        navigate("/sign-in");
+      })
+      .then(() => {
+        infoTooltipSetter(true, true);
+      })
+      .catch((err) => {
+        infoTooltipSetter(true, false);
+        console.log(err);
+      });
   }
 
   return (
@@ -16,7 +30,7 @@ function Register({ handleRegister }) {
       textOfButton="Зарегистрироваться"
     >
       <p className="entry-form__paragraph">
-        Уже зарегистрированы?{" "}
+        Уже зарегистрированы? &nbsp;
         <Link className="entry-form__link" to="/sign-in">
           Войти
         </Link>
