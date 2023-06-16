@@ -1,4 +1,5 @@
 import { apiConfig } from "./constants.js";
+import checkResponse from './checkResponse';
 class Api {
   constructor(config) {
     this._url = config.url;
@@ -13,7 +14,8 @@ class Api {
         "Content-Type": "application/json",
       },
     })
-    .then((res) => this._checkResponse(res));
+    // .then((res) => this._checkResponse(res));
+    .then(checkResponse)
   }
 
   // другие методы работы с API
@@ -25,7 +27,9 @@ class Api {
       headers: {
         authorization: this._authorization,
       },
-    }).then((res) => this._checkResponse(res));
+    })
+      // .then((res) => this._checkResponse(res));
+      .then(checkResponse)
   }
 
   //передать данные пользователя на сервер
@@ -40,7 +44,9 @@ class Api {
         name: data.name,
         about: data.about,
       }),
-    }).then((res) => this._checkResponse(res));
+    })
+      // .then((res) => this._checkResponse(res));
+    .then(checkResponse)
   }
 
   //добавление новой карточки на сервер
@@ -55,7 +61,9 @@ class Api {
         name: data.name,
         link: data.link,
       }),
-    }).then((res) => this._checkResponse(res));
+    })
+      // .then((res) => this._checkResponse(res));
+    .then(checkResponse)
   }
 
   //передача лайка на сервер
@@ -85,14 +93,18 @@ class Api {
         headers: {
           authorization: this._authorization,
         },
-      }).then((res) => this._checkResponse(res));
+      })
+        // .then((res) => this._checkResponse(res));
+    .then(checkResponse)
     } else {
       return fetch(`${this._url}/cards/${dataId}/likes`, {
         method: "PUT",
         headers: {
           authorization: this._authorization,
         },
-      }).then((res) => this._checkResponse(res));
+      })
+        // .then((res) => this._checkResponse(res));
+    .then(checkResponse)
     }
 
 
@@ -108,7 +120,9 @@ class Api {
       headers: {
         authorization: this._authorization,
       },
-    }).then((res) => this._checkResponse(res));
+    })
+      // .then((res) => this._checkResponse(res));
+    .then(checkResponse)
   }
 
   //------- смена автарки ------------
@@ -122,18 +136,20 @@ class Api {
       body: JSON.stringify({
         avatar: data.avatar,
       }),
-    }).then((res) => this._checkResponse(res));
+    })
+      // .then((res) => this._checkResponse(res));
+    .then(checkResponse)
   }
 
   //---------проверка /вывод ошибки----------
-  _checkResponse(res) {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(
-      `Пердоньте Монсеньёр: есть Ошибка: ${res.status}`
-    );
-  }
+  // _checkResponse(res) {
+  //   if (res.ok) {
+  //     return res.json();
+  //   }
+  //   return Promise.reject(
+  //     `Пердоньте Монсеньёр: есть Ошибка: ${res.status}`
+  //   );
+  // }
 }
 
 export const api = new Api(apiConfig);

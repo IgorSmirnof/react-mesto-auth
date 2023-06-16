@@ -1,5 +1,5 @@
+import checkResponse from './checkResponse';
 export const BASE_URL = 'https://auth.nomoreparties.co';
-// const signin = 'signin',
 
 export function register(password, email) {
   return fetch(`${BASE_URL}/signup`, {
@@ -9,7 +9,8 @@ export function register(password, email) {
     },
     body: JSON.stringify({ password, email })
   })
-    .then((res) => res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`))
+    // .then((res) => res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`))
+  .then(checkResponse)
 };
 
 export function authorize(password,email ) {
@@ -20,7 +21,8 @@ export function authorize(password,email ) {
     },
     body: JSON.stringify({ password, email })
   })
-    .then((res) => res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`))
+  // .then((res) => res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`))
+.then(checkResponse)
 };
 
 export function checkToken(token) {
@@ -31,9 +33,12 @@ export function checkToken(token) {
       "Authorization": `Bearer ${token}`
     }
   })
-    .then((res) => res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)) 
+  // .then((res) => res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`))
+.then(checkResponse)
 }
 
+
+  
 // export function sign(password, email, type) {
 //   return fetch(`${BASE_URL}/``${type}`, {
 //     method: 'POST',

@@ -1,27 +1,12 @@
 import React from "react";
 import AuthForm from "./AuthForm";
-import { Link, useNavigate } from "react-router-dom";
-import * as auth from "../utils/auth";
+import { Link } from "react-router-dom";
 
-function Register({ setIsSuccesRegister, isOpen }) {
-  const navigate = useNavigate();
+function Register({ handleReg }) {
 
   function handleSubmit(e, password, email) {
     e.preventDefault();
-    auth
-      .register(password, email)
-      .then(() => {
-        navigate("/sign-in");
-      })
-      .then(() => {
-        setIsSuccesRegister(true);
-        isOpen(true);
-      })
-      .catch((err) => {
-        setIsSuccesRegister(false);
-        isOpen(true);
-        console.log('Ошибка при регистрации:', err);
-      });
+    handleReg(password, email);
   }
 
   return (

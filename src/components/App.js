@@ -146,6 +146,48 @@ function App() {
     localStorage.clear("jwt");
     setLoggedIn(false);
   }
+  
+  function onLogin(email, data) {
+    localStorage.setItem("jwt", data.token);
+    localStorage.setItem("email", email);
+    setLoggedIn(true);
+  }
+
+  function handleAuth(password, email) {
+    auth
+    .authorize(password, email)
+    .then((data) => {
+      if (data.token) {
+        onLogin(email, data);
+      }
+    })
+    .then(() => {
+      navigate("/");
+      setIsSuccesRegister(true);
+    })
+    .catch((err) => {
+      setIsSuccesRegister(false);
+      setIsTooltipOpen(true);
+      console.log('Ошибка при входе:', err);
+    });
+  }
+
+  function handleReg(password, email) {
+    auth
+    .register(password, email)
+    .then(() => {
+      navigate("/sign-in");
+    })
+    .then(() => {
+      setIsSuccesRegister(true);
+      setIsTooltipOpen(true);
+    })
+    .catch((err) => {
+      setIsSuccesRegister(false);
+      setIsTooltipOpen(true);
+      console.log('Ошибка при регистрации:', err);
+    });
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -158,6 +200,7 @@ function App() {
               <Register
                 setIsSuccesRegister={setIsSuccesRegister}
                 isOpen={setIsTooltipOpen}
+                handleReg={handleReg}
               />
             }
           />
@@ -168,6 +211,7 @@ function App() {
                 setLoggedIn={setLoggedIn}
                 setIsSuccesRegister={setIsSuccesRegister}
                 isOpen={setIsTooltipOpen}
+                handleAuth={handleAuth}
               />
             }
           />
@@ -195,6 +239,7 @@ function App() {
                 setLoggedIn={setLoggedIn}
                 setIsSuccesRegister={setIsSuccesRegister}
                 isOpen={setIsTooltipOpen}
+                handleAuth={handleAuth}
               />
             }
           />
