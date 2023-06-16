@@ -20,18 +20,18 @@ function Register({ setIsSuccesRegister, isOpen }) {
       .catch((err) => {
         setIsSuccesRegister(false);
         isOpen(true);
-        console.log(err);
+        console.log('Ошибка при регистрации:', err);
       });
   }
 
   return (
     <AuthForm
       title="Регистрация"
-      pathOfButton="/sign-up"
-      handleSubmit={handleSubmit}
       textOfButton="Зарегистрироваться"
+      handleSubmit={handleSubmit}
+      pathOfButton="/sign-up"
     >
-      <p className="entry-form__paragraph">
+      <p className="entry-form__subtext">
         Уже зарегистрированы? &nbsp;
         <Link className="entry-form__link" to="/sign-in">
           Войти

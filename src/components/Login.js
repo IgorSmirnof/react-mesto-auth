@@ -22,8 +22,8 @@ function Login({ setIsSuccesRegister, setLoggedIn, isOpen }) {
       })
       .catch((err) => {
         setIsSuccesRegister(false);
-        console.log(err);
         isOpen(true);
+        console.log('Ошибка при входе:', err);
       });
   }
 

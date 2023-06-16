@@ -7,6 +7,7 @@
 @import url(../src/blocks/header/__logo/header__logo.css);
 @import url(../src/blocks/header/__entry/header__entry.css);
 @import url(../src/blocks/header/__button/header__button.css);
+@import url(../src/blocks/header/__link/header__link.css);
 
 @import url(../src/blocks/profile/profile.css);
 /* @import url(../src/blocks/avatar/avatar.css); */
@@ -61,6 +62,6 @@
 @import url(../src/blocks/entry-form/__form/entry-form__form.css);
 @import url(../src/blocks/entry-form/__input/entry-form__input.css);
 @import url(../src/blocks/entry-form/__link/entry-form__link.css);
-@import url(../src/blocks/entry-form/__paragraph/entry-form__paragraph.css);
+@import url(../src/blocks/entry-form/__subtext/entry-form__paragraph.css);
 @import url(../src/blocks/entry-form/__submit/entry-form__submit.css);
 @import url(../src/blocks/entry-form/__title/entry-form__title.css);
