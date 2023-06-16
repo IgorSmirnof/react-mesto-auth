@@ -29,32 +29,26 @@ function App() {
   const [email, setEmail] = useState("email");
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
-  const [infoTooltip, setInfoTooltip] = useState({
-    isSuccessRegister: false,
-    isOpen: false,
-  });
-  // const [infoTooltip, setInfoTooltip] = useState(false);
 
-  
+  const [isSuccessRegister, setIsSuccesRegister] = useState(false);
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
 
   useEffect(() => {
     Promise.all([api.getUserInfoApi(), api.getInitialCards()])
       .then(([user, card]) => {
         setCurrentUser(user);
         setCards(card);
-        // console.log(user);
       })
       .catch((err) => console.log(" еггог получения промиса", err));
   }, []); // <----<< [] -- при монтировании один раз!
-
 
   useEffect(() => {
     if (localStorage.getItem("jwt")) {
       const jwt = localStorage.getItem("jwt");
       auth
         .checkToken(jwt)
-        .then(({ email }) => {
-          if (email) {
+        .then((data) => {
+          if (data) {
             setEmail(email);
           }
         })
@@ -72,43 +66,8 @@ function App() {
 
   useEffect(() => {
     setEmail(localStorage.getItem("email"));
+    //eslint-disable-next-line
   }, []);
-
-  // function onLogin(email, data) {
-  //   localStorage.setItem("jwt", data.token);
-  //   localStorage.setItem("email", email);
-  //   setLoggedIn(true);
-  // }
-  // function handleRegister(password, email) {
-  //   auth
-  //     .register(password, email)
-  //     .then(() => {
-  //       navigate("/sign-in");
-  //     })
-  //     .then(() => {
-  //       infoTooltipSetter(true, true);
-  //     })
-  //     .catch((err) => {
-  //       infoTooltipSetter(true, false);
-  //       console.log(err);
-  //     });
-  // }
-  // function handleAuthorize(password, email) {
-  //   auth
-  //     .authorize(password, email)
-  //     .then((data) => {
-  //       if (data.token) {
-  //         onLogin(email, data);
-  //       }
-  //     })
-  //     .then(() => {
-  //       navigate("/");
-  //     })
-  //     .catch((err) => {
-  //       infoTooltipSetter(true, false);
-  //       console.log(err);
-  //     });
-  // }
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -131,8 +90,7 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setSelectedCard(null);
-    setInfoTooltip({ ...infoTooltip, isOpen: false });
-    // setInfoTooltip(false );
+    setIsTooltipOpen(false);
   }
 
   function handleCardLike(card) {
@@ -187,15 +145,10 @@ function App() {
       })
       .catch((err) => console.log("добавлениe карточки :", err));
   }
-  
+
   function isSign() {
     localStorage.clear("jwt");
     setLoggedIn(false);
-    console.log("click isSign");
-  }
-
-  function infoTooltipSetter(isOpen, isSuccessRegister) {
-    setInfoTooltip({ isSuccessRegister, isOpen });
   }
 
   return (
@@ -205,12 +158,22 @@ function App() {
         <Routes>
           <Route
             path="/sign-up"
-            element={<Register infoTooltipSetter={infoTooltipSetter} />}
-            // handleRegister={handleRegister}
+            element={
+              <Register
+                setIsSuccesRegister={setIsSuccesRegister}
+                isOpen={setIsTooltipOpen}
+              />
+            }
           />
           <Route
             path="/sign-in"
-            element={<Login setLoggedIn={setLoggedIn} infoTooltipSetter={infoTooltipSetter} />}
+            element={
+              <Login
+                setLoggedIn={setLoggedIn}
+                setIsSuccesRegister={setIsSuccesRegister}
+                isOpen={setIsTooltipOpen}
+              />
+            }
             // handleAuthorize={handleAuthorize}
           />
           <Route
@@ -230,9 +193,18 @@ function App() {
               />
             }
           />
-          <Route path="*" element={<Login infoTooltipSetter={infoTooltipSetter} />} />
+          <Route
+            path="*"
+            element={
+              <Login
+                setLoggedIn={setLoggedIn}
+                setIsSuccesRegister={setIsSuccesRegister}
+                isOpen={setIsTooltipOpen}
+              />
+            }
+          />
         </Routes>
-        {loggedIn && <Footer />}
+        <Footer />
 
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
@@ -273,8 +245,8 @@ function App() {
 
         <InfoTooltip
           onClose={closeAllPopups}
-          isOpen={infoTooltip.isOpen}
-          isSuccessRegister={infoTooltip.isSuccessRegister}
+          isOpen={isTooltipOpen}
+          isSuccessRegister={isSuccessRegister}
         />
       </div>
     </CurrentUserContext.Provider>

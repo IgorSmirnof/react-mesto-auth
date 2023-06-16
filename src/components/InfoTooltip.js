@@ -8,7 +8,7 @@ function InfoTooltip({
   onClose,
   isSuccessRegister
 }) {
-console.log('run InfoTooltip')
+// console.log('run InfoTooltip')
   return (
     <div className={`popup popup__title_entry ${isOpen ? 'popup_opened' : ''}`}>
       <div className="popup__container">

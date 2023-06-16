@@ -5,22 +5,22 @@
   box-sizing: border-box;
   padding: 13px 0;
   border: none;
-  border-bottom: 2px solid #CCCCCC;
+  border-bottom: 2px solid #ccc;
   outline: none;
-  font-family: 'Inter';
+
+  font-family: "Inter";
   font-weight: 500;
   font-size: 14px;
   line-height: 17px;
-  color: #FFFFFF;
+  color: #fff;
   background-color: transparent;
 }
 
- .entry-form__input:last-of-type {
-  margin-bottom: 216px;
+.entry-form__input:placeholder {
+  font-weight: 400;
+  color: #ccc;
 }
 
-.entry-form__input:placeholder {
-  font-family: 'Inter';
-  font-weight: 400;
-  color: #CCCCCC;
+.entry-form__input:last-of-type {
+  margin-bottom: 216px;
 }

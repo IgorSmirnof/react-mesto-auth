@@ -1,15 +1,14 @@
-import React from 'react';
-import AuthForm from './AuthForm';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import AuthForm from "./AuthForm";
+import { useNavigate } from "react-router-dom";
 import * as auth from "../utils/auth";
 
-function Login({ handleAuthorize, infoTooltipSetter, setLoggedIn }) {
-
-
+function Login({ setIsSuccesRegister, setLoggedIn, isOpen }) {
   const navigate = useNavigate();
+
   function handleSubmit(e, password, email) {
     e.preventDefault();
-  
+
     auth
       .authorize(password, email)
       .then((data) => {
@@ -19,10 +18,12 @@ function Login({ handleAuthorize, infoTooltipSetter, setLoggedIn }) {
       })
       .then(() => {
         navigate("/");
+        setIsSuccesRegister(true);
       })
       .catch((err) => {
-        infoTooltipSetter(true, false);
+        setIsSuccesRegister(false);
         console.log(err);
+        isOpen(true);
       });
   }
 
@@ -32,14 +33,9 @@ function Login({ handleAuthorize, infoTooltipSetter, setLoggedIn }) {
     setLoggedIn(true);
   }
 
-
   return (
-    <AuthForm
-      title='Вход'
-      textOfButton='Войти'
-      handleSubmit={handleSubmit}
-    />
+    <AuthForm title="Вход" textOfButton="Войти" handleSubmit={handleSubmit} />
   );
 }
 
-export default Login; 
+export default Login;

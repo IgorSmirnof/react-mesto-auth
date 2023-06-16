@@ -3,7 +3,7 @@ import AuthForm from "./AuthForm";
 import { Link, useNavigate } from "react-router-dom";
 import * as auth from "../utils/auth";
 
-function Register({ infoTooltipSetter }) {
+function Register({ setIsSuccesRegister, isOpen }) {
   const navigate = useNavigate();
 
   function handleSubmit(e, password, email) {
@@ -14,10 +14,12 @@ function Register({ infoTooltipSetter }) {
         navigate("/sign-in");
       })
       .then(() => {
-        infoTooltipSetter(true, true);
+        setIsSuccesRegister(true);
+        isOpen(true);
       })
       .catch((err) => {
-        infoTooltipSetter(true, false);
+        setIsSuccesRegister(false);
+        isOpen(true);
         console.log(err);
       });
   }
