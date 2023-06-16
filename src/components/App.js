@@ -49,7 +49,8 @@ function App() {
         .checkToken(jwt)
         .then((data) => {
           if (data) {
-            setEmail(email);
+            setEmail(data.data.email);
+            // console.log(data.data.email)
           }
         })
         .then(() => {
@@ -61,11 +62,6 @@ function App() {
           console.log(err);
         });
     }
-    //eslint-disable-next-line
-  }, []);
-
-  useEffect(() => {
-    setEmail(localStorage.getItem("email"));
     //eslint-disable-next-line
   }, []);
 
@@ -174,7 +170,6 @@ function App() {
                 isOpen={setIsTooltipOpen}
               />
             }
-            // handleAuthorize={handleAuthorize}
           />
           <Route
             path="/"
@@ -204,7 +199,7 @@ function App() {
             }
           />
         </Routes>
-        <Footer />
+        {loggedIn && <Footer />}
 
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
