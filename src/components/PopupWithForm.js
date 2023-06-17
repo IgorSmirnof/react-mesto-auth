@@ -1,6 +1,7 @@
 import React from "react";
 
-export default function PopupWithForm({ title, name, isOpen, onClose, children, onSubmit}) {
+export default function PopupWithForm({ title, name, isOpen, onClose, children, onSubmit, buttonText }) {
+  
   return (
     <div className={`popup popup_${name} ${isOpen ? "popup_opened" : ""}` } >
         <form
@@ -22,7 +23,7 @@ export default function PopupWithForm({ title, name, isOpen, onClose, children, 
           /> */}
         <span className={`input-${name}-error input-error`}></span>
         {children}
-          <button className="popup__button-save button" type="submit">Сохранить</button>
+        <button className="popup__button-save button" type="submit">{buttonText}</button>
         </form>
       </div>
   )

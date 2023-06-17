@@ -281,7 +281,9 @@ function App() {
       
       </PopupWithForm> */}
 
-        <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+        {/* <ImagePopup card={selectedCard} onClose={closeAllPopups} /> */}
+        
+        <ImagePopup card={selectedCard} onClose={closeAllPopups} isOpen={isAddPlacePopupOpen} name='picture'/> 
 
         <InfoTooltip
           onClose={closeAllPopups}

@@ -23,6 +23,7 @@ function ConfirmPopup({
       text={textOfButton}
       onSubmit={handleSubmit}
       isFormValid={isFormValid}
+      buttonText='Сохранить'
     />
   )
 }
