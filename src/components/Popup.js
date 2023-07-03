@@ -34,13 +34,9 @@ const Popup = ({ isOpen, name, onClose, children, container }) => {
     >
     {/* добавляем контейнер для контента попапа */}
       <div className={`popup__${container}`}>
-      {/* <div className={`'popup__container ${name === 'picture' ? "popup__figure" : ""}'`}> */}
         
         {/* тут может быть любой контент попапа в `children`: хоть для попапа картинки, хоть для `InfoToolTip`, 
         хоть для `PopupWithForm` */}
-        
-        {/* кнопка крестика есть у любого попапа */}
-        
         {children}
         <button
           className='popup__close button'
